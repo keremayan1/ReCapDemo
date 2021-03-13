@@ -5,9 +5,4 @@
     <UserSecretsId>c73b2dff-6e08-4e8d-92da-a60ac41770e4</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstract\" />
-    <Folder Include="Concrete\" />
-  </ItemGroup>
-
 </Project>
