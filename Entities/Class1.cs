@@ -1,11 +1,8 @@
 ﻿using System;
 
-namespace Business
+namespace Entities
 {
     public class Class1
-    
     {
-        asdklasdf
     }
-
 }
