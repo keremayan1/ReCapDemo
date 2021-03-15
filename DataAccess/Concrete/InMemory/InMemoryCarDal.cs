@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Entities.Concrete.Dto;
 
 namespace DataAccess.Concrete.InMemory
 {
@@ -41,6 +42,11 @@ namespace DataAccess.Concrete.InMemory
         }
 
         public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetail()
         {
             throw new NotImplementedException();
         }

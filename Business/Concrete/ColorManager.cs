@@ -36,7 +36,7 @@ namespace Business.Concrete
            _colorDal.Update(color);
         }
 
-        public List<Color> GetByCategory(int id)
+        public List<Color> GetById(int id)
         {
           return  _colorDal.GetAll(p => p.Id == id);
         }
