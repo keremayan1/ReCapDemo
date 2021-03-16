@@ -4,11 +4,13 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.Constants;
+using Core.Utilities.Results;
 using Entities.Concrete.Dto;
 
 namespace Business.Concrete
 {
-  public  class CarManager:ICarService,IRuleService<Car>
+    public class CarManager : ICarService, IRuleService<Car>
     {
         ICarDal _carDal;
         public CarManager(ICarDal carDal)
@@ -16,50 +18,53 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return _carDal.GetAll(p => p.ColorId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == id),CarMessages.CarListed);
         }
 
-        public List<CarDetailDto> GetCarDetail()
+        public IDataResult<List<CarDetailDto>> GetCarDetail()
         {
-            return _carDal.GetCarDetail();
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetail(),CarMessages.CarListed);
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
             minDailyPrice(car);
             minCarName(car);
             _carDal.Add(car);
+            return new SuccessResult(CarMessages.CarAdded);
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             _carDal.Delete(car);
+            return new SuccessResult(CarMessages.CarDeleted);
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarListed);
         }
 
-        public List<Car> GetById(int id)
+        public IDataResult<List<Car>> GetById(int id)
         {
-            return _carDal.GetAll(p => p.Id == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.Id == id),CarMessages.CarListed);
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public IDataResult<List<Car> > GetCarsByBrandId(int id)
         {
-            return _carDal.GetAll(p => p.BrandId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == id),CarMessages.CarListed)  ;
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
             _carDal.Update(car);
+            return new SuccessResult(CarMessages.CarUpdated);
         }
         public void minCarName(Car entity)
         {
-            if (entity.Description.Length<=2)
+            if (entity.Description.Length <= 2)
             {
                 throw new Exception("Araba İsmi En Az 2 Haneli olmalı");
             }
