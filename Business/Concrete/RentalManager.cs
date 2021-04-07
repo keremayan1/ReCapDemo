@@ -31,11 +31,7 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var result = CheckReturnDate(rental.CarId);
-            if (!result.Success)
-            {
-                return new ErrorResult();
-            }
+            
 
             _rentalDal.Add(rental);
             return new SuccessResult();
@@ -59,29 +55,37 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>();
         }
 
-        public IResult CheckReturnDate(int id)
+        public IDataResult<bool> IsForRent(int id)
         {
-            var result = _rentalDal.GetAll(p => p.CarId == id && p.ReturnDate == null);
-            if (result.Count > 0)
+            var IsForRent1 = _rentalDal.GetAll(p => p.CarId == id).Any(p => p.CarId == id);
+            if (IsForRent1)
             {
-                return new ErrorResult();
-            }
+                var result = _rentalDal.GetAll(p => p.CarId == id && p.ReturnDate != null);
+                if (result != null)
+                {
 
-            return new SuccessResult();
+                    return new SuccessDataResult<bool>("Başarılı1");
+                }
+                return new SuccessDataResult<bool>("Başarılı2");
+            }
+            return new SuccessDataResult<bool>("Başarılı3");
         }
 
-        public IResult UpdateReturnDate(Rental rental)
+        public IResult IsForRentCompany(Rental rental)
         {
-            var result = _rentalDal.GetAll(p => p.Id == rental.Id);
-            var result2 = result.LastOrDefault();
-            if (result2.ReturnDate!=null)
+            var result = _rentalDal.GetAll(p => p.CarId == rental.CarId).Any(p => p.CarId == rental.CarId);
+            if (result)
             {
-                return new ErrorResult();
-            }
+                var result2 = _rentalDal.Get(p =>
+                    p.CarId == rental.CarId && p.ReturnDate != null && p.CustomerId == rental.CustomerId);
+                if (result2!=null)
+                {
+                    return new SuccessResult("Başarılı");
+                }
 
-            result2.ReturnDate = rental.ReturnDate;
-             _rentalDal.Update(result2);
-            return new SuccessResult();
+                return new SuccessResult("Başarılı2");
+            }
+            return new SuccessResult("Başarılı3");
         }
     }
 }

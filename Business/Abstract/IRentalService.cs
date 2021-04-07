@@ -14,7 +14,8 @@ namespace Business.Abstract
         IResult Update(Rental rental);
         IResult Delete(Rental rental);
         IDataResult<List<Rental>> GetRentalDetails(int id);
-        IResult CheckReturnDate(int id);
-        IResult UpdateReturnDate(Rental rental);
+        IDataResult<bool> IsForRent(int id);
+        IResult IsForRentCompany(Rental rental);
+
     }
 }
