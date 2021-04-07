@@ -55,7 +55,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>();
         }
 
-        public IDataResult<bool> IsForRent(int id)
+        public IDataResult<Rental> IsForRent(int id)
         {
             var IsForRent1 = _rentalDal.GetAll(p => p.CarId == id).Any(p => p.CarId == id);
             if (IsForRent1)
@@ -64,7 +64,7 @@ namespace Business.Concrete
                 if (result != null)
                 {
 
-                    return new SuccessDataResult<bool>("Başarılı1");
+                    return new SuccessDataResult<>("Başarılı1");
                 }
                 return new SuccessDataResult<bool>("Başarılı2");
             }
