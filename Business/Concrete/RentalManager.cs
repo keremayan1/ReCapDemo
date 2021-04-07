@@ -64,11 +64,11 @@ namespace Business.Concrete
                 if (result != null)
                 {
 
-                    return new SuccessDataResult<>("Başarılı1");
+                    return new SuccessDataResult<Rental>("Başarılı1");
                 }
-                return new SuccessDataResult<bool>("Başarılı2");
+                return new SuccessDataResult<Rental>("Başarılı2");
             }
-            return new SuccessDataResult<bool>("Başarılı3");
+            return new SuccessDataResult<Rental>("Başarılı3");
         }
 
         public IResult IsForRentCompany(Rental rental)
