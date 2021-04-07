@@ -80,7 +80,7 @@ namespace Business.Concrete
             }
 
             result2.ReturnDate = rental.ReturnDate;
-            _rentalDal.Update(result2);
+             _rentalDal.Update(result2);
             return new SuccessResult();
         }
     }
