@@ -80,7 +80,7 @@ namespace Business.Concrete
                     p.CarId == rental.CarId && p.ReturnDate != null && p.CustomerId == rental.CustomerId);
                 if (result2!=null)
                 {
-                    return new SuccessResult("Başarılı");
+                     return new SuccessResult("Başarılı1");
                 }
 
                 return new SuccessResult("Başarılı2");
