@@ -18,7 +18,11 @@ namespace Business.Concrete
         {
             _rentalDal = rentalDal;
         }
-
+        private void Datetime()
+        {
+     
+        
+        }
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
@@ -29,9 +33,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(p => p.Id == rentalId));
         }
 
+        public void getir(Rental rental)
+        {
+ rental.RentDate=DateTime.Now;
+         // rental.ReturnDate=DateTime.Now;
+        }
+            
         public IResult Add(Rental rental)
         {
-            
+
+         getir(rental);
 
             _rentalDal.Add(rental);
             return new SuccessResult();
@@ -78,14 +89,32 @@ namespace Business.Concrete
             {
                 var result2 = _rentalDal.Get(p =>
                     p.CarId == rental.CarId && p.ReturnDate != null && p.CustomerId == rental.CustomerId);
-                if (result2!=null)
+                if (result2 != null)
                 {
-                     return new SuccessResult("Başarılı1");
+                    return new SuccessResult("Başarılı1");
                 }
 
                 return new SuccessResult("Başarılı2");
             }
             return new SuccessResult("Başarılı3");
+        }
+
+        public IResult  ReturnDateNull(Rental rental)
+        {
+            var result = _rentalDal.GetAll(p => p.CarId == rental.CarId).Any(p => p.CarId == rental.CarId);
+            if (result)
+            {
+                var result2 = _rentalDal.Get(p => p.ReturnDate == null);
+                if (result2==null)
+                {
+                    _rentalDal.GetAll(p => p.ReturnDate == null);
+                    return new SuccessResult("Kiralanmamış Arabalar1");
+                }
+
+                return new SuccessResult("Kiralanmamış Arabalar2");
+            }
+
+            return new SuccessResult("Kiralanmamış Arabalar3");
         }
     }
 }

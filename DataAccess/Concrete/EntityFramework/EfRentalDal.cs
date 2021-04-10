@@ -33,7 +33,7 @@ namespace DataAccess.Concrete.EntityFramework
                         DailyPrice = car.DailyPrice,
                         TotalPrice = Convert.ToDecimal(rent.ReturnDate.Day - rent.RentDate.Day) * car.DailyPrice,
                         RentDate = rent.RentDate,
-                        ReturnDate = rent.ReturnDate
+                        ReturnDate = (DateTime)rent.ReturnDate
 
                     };
                 return result.ToList();
