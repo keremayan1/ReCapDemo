@@ -12,7 +12,7 @@ using Entities.Concrete.Dto;
 
 namespace Business.Concrete
 {
-    public class CarManager : ICarService, IRuleService<Car>
+    public class CarManager : ICarService
     {
         ICarDal _carDal;
         public CarManager(ICarDal carDal)
@@ -66,19 +66,7 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccessResult(CarMessages.CarUpdated);
         }
-        public void minCarName(Car entity)
-        {
-            if (entity.Description.Length <= 2)
-            {
-                throw new Exception("Araba İsmi En Az 2 Haneli olmalı");
-            }
-        }
-        public void minDailyPrice(Car entity)
-        {
-            if (entity.DailyPrice <= 0)
-            {
-                throw new Exception("Günlük Fiyat 0'dan büyük olmalı");
-            }
-        }
+      
+       
     }
 }
