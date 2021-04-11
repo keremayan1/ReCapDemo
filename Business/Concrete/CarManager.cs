@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Business.Constants;
+using Business.Validation_Rules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using Entities.Concrete.Dto;
 
@@ -28,10 +30,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetail(),CarMessages.CarListed);
         }
 
+
+
+        [ValidationAspect(typeof(CarValidatior))]
         public IResult Add(Car car)
         {
-            minDailyPrice(car);
-            minCarName(car);
+            
             _carDal.Add(car);
             return new SuccessResult(CarMessages.CarAdded);
         }
