@@ -20,32 +20,38 @@ namespace Business.Concrete
 
         public IResult Add(User user)
         {
-            throw new NotImplementedException();
+            _userDal.Add(user);
+            return new SuccessResult();
         }
 
         public IResult Delete(User user)
         {
-            throw new NotImplementedException();
+            _userDal.Delete(user);
+            return new SuccessResult();
         }
 
         public IDataResult<List<User>> GetAll()
         {
-            throw new NotImplementedException();
+            _userDal.GetAll();
+            return new SuccessDataResult<List<User>>();
         }
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            throw new NotImplementedException();
+            _userDal.GetClaims(user);
+            return new SuccessDataResult<List<OperationClaim>>();
         }
 
         public IDataResult<User> GetUserByEmail(string email)
         {
-           
+            _userDal.Get(p => p.Email == email);
+            return new SuccessDataResult<User>();
         }
 
         public IResult Update(User user)
         {
-            throw new NotImplementedException();
+            _userDal.Update(user);
+            return new SuccessResult();
         }
     }
 }
