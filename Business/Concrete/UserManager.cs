@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -17,32 +18,34 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        public IDataResult<List<User>> GetAll()
-        {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll());
-        }
-
-        public IDataResult<List<User>> GetByUserId(int id)
-        {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(p => p.Id == id));
-        }
-
         public IResult Add(User user)
         {
-            _userDal.Add(user);
-            return new SuccessResult();
-        }
-
-        public IResult Update(User user)
-        {
-            _userDal.Update(user);
-            return new SuccessResult();
+            throw new NotImplementedException();
         }
 
         public IResult Delete(User user)
         {
-            _userDal.Delete(user);
-            return new SuccessResult();
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<List<User>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<User> GetUserByEmail(string email)
+        {
+           
+        }
+
+        public IResult Update(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }
