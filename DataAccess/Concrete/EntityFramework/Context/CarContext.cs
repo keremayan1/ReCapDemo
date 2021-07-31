@@ -11,7 +11,8 @@ namespace DataAccess.Concrete.EntityFramework.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Car;Trusted_Connection=true");
+            //@"Server=(localdb)\mssqllocaldb;Database=Car;Trusted_Connection=true"
+            optionsBuilder.UseSqlServer(@"Data Source = DESKTOP - UVHOA24\SQLEXPRESS; Initial Catalog = Car; Integrated Security = True");
         }
 
 

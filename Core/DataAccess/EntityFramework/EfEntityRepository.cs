@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.DataAccess.EntityFramework
 {
-    public class EfEntityRepository<TEntity, TContext>:IEntityRepository<TEntity> where TEntity : class, IEntity, new()
+    public class EfEntityRepository<TEntity, TContext> : IEntityRepository<TEntity> where TEntity : class, IEntity, new()
     where TContext : DbContext, new()
     {
         public void Add(TEntity entity)
@@ -55,6 +55,20 @@ namespace Core.DataAccess.EntityFramework
             {
                 return context.Set<TEntity>().SingleOrDefault(filter);
             }
+        }
+
+        public void MultipleAdd(TEntity[] entities)
+        {
+            using (var context = new TContext())
+            {
+                foreach (var entity in entities)
+                {
+                    var multipleAdd = context.Entry(entity);
+                    multipleAdd.State = EntityState.Added;
+                    context.SaveChanges();
+                }
+            }
+
         }
     }
 }

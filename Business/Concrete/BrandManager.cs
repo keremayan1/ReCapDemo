@@ -23,7 +23,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),BrandMessages.BrandListed);
         }
-        [SecuredOperation("brands.add")]
+       // [SecuredOperation("brands.add")]
         public IResult Add(Brand brand)
         {
             _brandDal.Add(brand);

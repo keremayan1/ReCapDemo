@@ -69,5 +69,10 @@ namespace DataAccess.Concrete.InMemory
             carToUpdated.Description = car.Description;
             carToUpdated.ModelYear = car.ModelYear;
         }
+
+        public void MultipleAdd(Car[] entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

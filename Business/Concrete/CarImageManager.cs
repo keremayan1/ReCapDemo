@@ -20,57 +20,58 @@ namespace Business.Concrete
         {
             _carImageDal = carImageDal;
         }
-        public IResult Add(IFormFile formFile, CarImage carImage)
+        string error = "";
+        List<CarImage> carImages = new List<CarImage>();
+        public IResult Add(List<IFormFile> formFile, CarImage carImage)
         {
-            var result = BusinessRules.Run(CheckIfCarImages(carImage.ImagePath));
-            if (result!=null)
+            var result = BusinessRules.Run(CheckIfCarImageEmpty(carImage.CarId), CheckIfCarImages(carImage.ImagePath), ProductImageUploadCountFile(formFile, carImage));
+            if (result != null)
             {
-                return new ErrorResult();
+                return result;
             }
-
-            var uploadFile =
-                FileHelper.Upload(formFile, FileConstants.FileImageExtensions, FileConstants.ImageFolderName);
-            if (!uploadFile.Item1.Success)
-            {
-                return uploadFile.Item1;
-            }
-
-            carImage.ImagePath = uploadFile.dbPath;
-            carImage.Date = DateTime.Now;
-            _carImageDal.Add(carImage);
-            return new SuccessResult("Islem Basarili");
-        }
-
-        public IResult Update(IFormFile formFile, CarImage carImage)
-        {
-            _carImageDal.Update(carImage);
+            _carImageDal.MultipleAdd(carImages.ToArray());
             return new SuccessResult();
+
         }
 
-        public IResult Delete(IFormFile formFile, CarImage carImage)
+        public IResult ProductImageUploadCountFile(List<IFormFile> formFile, CarImage carImage)
         {
-           _carImageDal.Delete(carImage);
-           return new SuccessResult();
+            for (int i = 0; i < formFile.Count; i++)
+            {
+                var newImage = new CarImage
+                {
+                    CarId = carImage.CarId,
+                    Date = DateTime.Now
+                };
+                var imageResult = FileHelper.Upload(formFile[i]);
+                if (!imageResult.Success)
+                {
+                    error = imageResult.Message;
+                    break;
+                }
+                else
+                {
+                    newImage.ImagePath = imageResult.Message;
+                    carImages.Add(newImage);
+                }
+
+            }
+            return new SuccessResult();
         }
 
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
-
-        public IDataResult<List<CarImage>> GetCarImageById(int carId)
+        public IResult CheckIfCarImageEmpty(int id)
         {
-            var result = _carImageDal.GetAll(c => c.CarId == carId);
-            if (result.Count==0)
+            var result = _carImageDal.GetAll(c => c.Id == id);
+            if (result.Count == 0)
             {
-               result.Add(new CarImage{ImagePath = FileConstants.DefaultImagePath});
+                result.Add(new CarImage { ImagePath = FileConstants.DefaultImagePath });
             }
-
-            return new SuccessDataResult<List<CarImage>>();
+            return new SuccessResult();
         }
-
-
-
         private IResult CheckIfCarImages(string imagePath)
         {
             var result = _carImageDal.GetAll(c => c.ImagePath == imagePath).Count;
@@ -80,6 +81,23 @@ namespace Business.Concrete
             }
 
             return new SuccessResult();
+        }
+
+        public IResult Update(List<IFormFile> formFile, CarImage carImage)
+        {
+            _carImageDal.Update(carImage);
+            return new SuccessResult();
+        }
+
+        public IResult Delete(List<IFormFile> formFile, CarImage carImage)
+        {
+            _carImageDal.Delete(carImage);
+            return new SuccessResult();
+        }
+
+        public IDataResult<List<CarImage>> GetCarImageById(int id)
+        {
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.Id == id));
         }
     }
 }
