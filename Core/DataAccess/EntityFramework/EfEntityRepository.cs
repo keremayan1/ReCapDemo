@@ -57,13 +57,13 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public void MultipleAdd(TEntity[] entities)
+        public void MultipleAdd(TEntity[] entity)
         {
             using (var context = new TContext())
             {
-                foreach (var entity in entities)
+                foreach (var entities in entity)
                 {
-                    var multipleAdd = context.Entry(entity);
+                    var multipleAdd = context.Entry(entities);
                     multipleAdd.State = EntityState.Added;
                     context.SaveChanges();
                 }

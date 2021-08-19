@@ -11,7 +11,10 @@ namespace Core.Utilities.Business
         {
             foreach (var logic in logics)
             {
-                return logic;
+                if (!logic.Success)
+                {
+                    return logic;
+                }
             }
 
             return null;

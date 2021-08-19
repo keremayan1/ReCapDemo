@@ -14,11 +14,13 @@ namespace Business.Concrete
     {
         IUserService _userService;
         ITokenHelper _tokenHelper;
+        private IUserOperationClaimService _userOperationClaimService;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, IUserOperationClaimService userOperationClaimService)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
+            _userOperationClaimService = userOperationClaimService;
         }
 
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
@@ -35,12 +37,13 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, "");
+            _userOperationClaimService.Add(new UserOperationClaim {UserId = user.Id, OperationClaimId = 2});
+            return new SuccessDataResult<User>(user, "Basarili");
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
-            var userToCheck = _userService.GetUserByEmail(userForLoginDto.Email).Data;
+            var userToCheck = _userService.GetUserByEmail(userForLoginDto.Email);
             if (userToCheck == null)
             {
                 return new ErrorDataResult<User>();
@@ -58,7 +61,7 @@ namespace Business.Concrete
 
             if (_userService.GetUserByEmail(email) != null)
             {
-                return new ErrorResult();
+                return new ErrorResult("Sistemde Boyle Kullanici Vardir");
             }
 
             return new SuccessResult();
@@ -67,7 +70,7 @@ namespace Business.Concrete
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
-            var claims = _userService.GetClaims(user).Data;
+            var claims = _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user,claims);
             return new SuccessDataResult<AccessToken>(accessToken);
         }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.Dto;
 
 namespace WebAPI.Controllers
 {
@@ -64,9 +65,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Car car)
+        public IActionResult Add(Car carDetailDto)
         {
-            var result = _carService.Add(car);
+            var result = _carService.Add(carDetailDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -97,7 +98,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("getcardetail")]
+        [HttpGet("getcardetail")]
         public IActionResult GetCarDetail()
         {
             var result = _carService.GetCarDetail();

@@ -29,21 +29,23 @@ namespace Business.Concrete
             {
                 return result;
             }
+
+          
             _carImageDal.MultipleAdd(carImages.ToArray());
-            return new SuccessResult();
+            return new SuccessResult("Basarili");
 
         }
 
         public IResult ProductImageUploadCountFile(List<IFormFile> formFile, CarImage carImage)
         {
-            for (int i = 0; i < formFile.Count; i++)
+            foreach (var file in formFile)
             {
                 var newImage = new CarImage
                 {
                     CarId = carImage.CarId,
                     Date = DateTime.Now
                 };
-                var imageResult = FileHelper.Upload(formFile[i]);
+                var imageResult = FileHelper.Upload(file);
                 if (!imageResult.Success)
                 {
                     error = imageResult.Message;
@@ -54,8 +56,8 @@ namespace Business.Concrete
                     newImage.ImagePath = imageResult.Message;
                     carImages.Add(newImage);
                 }
-
             }
+
             return new SuccessResult();
         }
 

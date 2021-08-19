@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Business.Constants;
 using Business.Validation_Rules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using Entities.Concrete.Dto;
@@ -33,6 +34,7 @@ namespace Business.Concrete
 
 
         [ValidationAspect(typeof(CarValidatior))]
+        [CacheRemoveAspect("Get")]
         public IResult Add(Car car)
         {
             
@@ -45,7 +47,7 @@ namespace Business.Concrete
             _carDal.Delete(car);
             return new SuccessResult(CarMessages.CarDeleted);
         }
-
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarListed);
@@ -66,7 +68,7 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccessResult(CarMessages.CarUpdated);
         }
-      
-       
+
+     
     }
 }

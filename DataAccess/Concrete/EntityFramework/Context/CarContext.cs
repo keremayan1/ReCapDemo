@@ -12,7 +12,7 @@ namespace DataAccess.Concrete.EntityFramework.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //@"Server=(localdb)\mssqllocaldb;Database=Car;Trusted_Connection=true"
-            optionsBuilder.UseSqlServer(@"Data Source = DESKTOP - UVHOA24\SQLEXPRESS; Initial Catalog = Car; Integrated Security = True");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Car;Trusted_Connection=true");
         }
 
 
@@ -22,7 +22,7 @@ namespace DataAccess.Concrete.EntityFramework.Context
         public DbSet<Car> Cars { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        
+       
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<CarImage> CarImages { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
