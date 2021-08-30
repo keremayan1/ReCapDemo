@@ -31,9 +31,6 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetail(),CarMessages.CarListed);
         }
-
-
-
         [ValidationAspect(typeof(CarValidatior))]
         [CacheRemoveAspect("Get")]
         public IResult Add(Car car)

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -26,6 +28,11 @@ namespace Business.Concrete
        // [SecuredOperation("brands.add")]
         public IResult Add(Brand brand)
         {
+            var result = BusinessRules.Run(CheckIfBrandName(brand.Name));
+            if (result!=null)
+            {
+                return result;
+            }
             _brandDal.Add(brand);
             return new SuccessResult(BrandMessages.BrandAdded);
         }
@@ -45,6 +52,17 @@ namespace Business.Concrete
         public IDataResult<List<Brand>> GetById(int id)
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(p => p.Id == id),BrandMessages.BrandListed);
+        }
+
+        public IResult CheckIfBrandName(string name)
+        {
+            var result = _brandDal.Any(b => b.Name.ToLower() == name.ToLower());
+            if (result)
+            {
+                return new ErrorResult("Eklemek Istediginiz Araba Sistemde Vardir!");
+            }
+
+            return new SuccessResult();
         }
     }
 }

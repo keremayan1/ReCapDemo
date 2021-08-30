@@ -14,14 +14,15 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         private IRentalDal _rentalDal;
-       private ICarService _carService;
+        private ICarService _carService;
+       
 
         public RentalManager(IRentalDal rentalDal, ICarService carService)
         {
             _rentalDal = rentalDal;
             _carService = carService;
         }
-     
+
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
@@ -31,13 +32,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(p => p.Id == rentalId));
         }
-
-       
-            
         public IResult Add(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfCarId(rental.CarId), CheckIfRentalId(rental.Id),IsCarAvaliable(rental.CarId));
-            if (result!=null)
+            var result = BusinessRules.Run(CheckIfCarId(rental.CarId), CheckIfRentalId(rental.Id), IsCarAvaliable(rental.CarId));
+            if (result != null)
             {
                 return result;
             }
@@ -48,7 +46,7 @@ namespace Business.Concrete
         public IResult Update(Rental rental)
         {
             var result = BusinessRules.Run(CheckIfRentalId(rental.Id), CheckIfCarId(rental.CarId));
-            if (result!=null)
+            if (result != null)
             {
                 return result;
             }
@@ -59,7 +57,7 @@ namespace Business.Concrete
         public IResult Delete(Rental rental)
         {
             var result = BusinessRules.Run(CheckIfRentalId(rental.Id));
-            if (result!=null)
+            if (result != null)
             {
                 return result;
             }
@@ -75,7 +73,7 @@ namespace Business.Concrete
         public IResult CheckIfCarId(int carId)
         {
             var result = _carService.GetByCarId(carId);
-            if (result==null)
+            if (result == null)
             {
                 return new ErrorResult("Arac Kiralanamaz!");
             }
@@ -83,7 +81,7 @@ namespace Business.Concrete
         }
         public IResult IsCarAvaliable(int carId)
         {
-            var result = _rentalDal.Any(r=>r.CarId == carId &&(r.ReturnDate==null || r.ReturnDate<DateTime.Now));
+            var result = _rentalDal.Any(r => r.CarId == carId && (r.ReturnDate == null || r.ReturnDate < DateTime.Now));
             if (result)
             {
                 return new ErrorResult("Araba Kiralanmaya uygun değil");
@@ -99,8 +97,8 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-      
 
-      
+
+
     }
 }
