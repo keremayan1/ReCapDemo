@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
@@ -31,13 +32,18 @@ namespace DataAccess.Concrete.EntityFramework
                         CarName = car.Description,
                         ColorName = color.Name,
                         DailyPrice = car.DailyPrice,
-                        TotalPrice = Convert.ToDecimal(rent.ReturnDate.Day - rent.RentDate.Day) * car.DailyPrice,
+                        TotalPrice = Convert.ToDecimal(rent.ReturnDate.Value.Day - rent.RentDate.Day) * car.DailyPrice,
                         RentDate = rent.RentDate,
-                        ReturnDate = (DateTime)rent.ReturnDate
+                        ReturnDate = rent.ReturnDate.Value
 
                     };
                 return result.ToList();
             }
+        }
+
+        public List<CarRentalDetailDto> CarRentalDetails(Expression<Func<Car, bool>> filter = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }

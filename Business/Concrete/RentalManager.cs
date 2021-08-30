@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Business.Abstract;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -13,16 +14,14 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         private IRentalDal _rentalDal;
+       private ICarService _carService;
 
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, ICarService carService)
         {
             _rentalDal = rentalDal;
+            _carService = carService;
         }
-        private void Datetime()
-        {
      
-        
-        }
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
@@ -33,29 +32,37 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(p => p.Id == rentalId));
         }
 
-        public void getir(Rental rental)
-        {
- rental.RentDate=DateTime.Now;
-         // rental.ReturnDate=DateTime.Now;
-        }
+       
             
         public IResult Add(Rental rental)
         {
-
-         getir(rental);
-
+            var result = BusinessRules.Run(CheckIfCarId(rental.CarId), CheckIfRentalId(rental.Id),IsCarAvaliable(rental.CarId));
+            if (result!=null)
+            {
+                return result;
+            }
             _rentalDal.Add(rental);
             return new SuccessResult();
         }
 
         public IResult Update(Rental rental)
         {
+            var result = BusinessRules.Run(CheckIfRentalId(rental.Id), CheckIfCarId(rental.CarId));
+            if (result!=null)
+            {
+                return result;
+            }
             _rentalDal.Update(rental);
             return new SuccessResult();
         }
 
         public IResult Delete(Rental rental)
         {
+            var result = BusinessRules.Run(CheckIfRentalId(rental.Id));
+            if (result!=null)
+            {
+                return result;
+            }
             _rentalDal.Delete(rental);
             return new SuccessResult();
         }
@@ -65,56 +72,35 @@ namespace Business.Concrete
             _rentalDal.CarRentalDetails();
             return new SuccessDataResult<List<Rental>>();
         }
-
-        public IDataResult<Rental> IsForRent(int id)
+        public IResult CheckIfCarId(int carId)
         {
-            var IsForRent1 = _rentalDal.GetAll(p => p.CarId == id).Any(p => p.CarId == id);
-            if (IsForRent1)
+            var result = _carService.GetByCarId(carId);
+            if (result==null)
             {
-                var result = _rentalDal.GetAll(p => p.CarId == id && p.ReturnDate != null);
-                if (result != null)
-                {
-
-                    return new SuccessDataResult<Rental>("Başarılı1");
-                }
-                return new SuccessDataResult<Rental>("Başarılı2");
+                return new ErrorResult("Arac Kiralanamaz!");
             }
-            return new SuccessDataResult<Rental>("Başarılı3");
+            return new SuccessResult();
         }
-
-        public IResult IsForRentCompany(Rental rental)
+        public IResult IsCarAvaliable(int carId)
         {
-            var result = _rentalDal.GetAll(p => p.CarId == rental.CarId).Any(p => p.CarId == rental.CarId);
+            var result = _rentalDal.Any(r=>r.CarId == carId &&(r.ReturnDate==null || r.ReturnDate<DateTime.Now));
             if (result)
             {
-                var result2 = _rentalDal.Get(p =>
-                    p.CarId == rental.CarId && p.ReturnDate != null && p.CustomerId == rental.CustomerId);
-                if (result2 != null)
-                {
-                    return new SuccessResult("Başarılı1");
-                }
-
-                return new SuccessResult("Başarılı2");
+                return new ErrorResult("Araba Kiralanmaya uygun değil");
             }
-            return new SuccessResult("Başarılı3");
+            return new SuccessResult();
         }
-
-        public IResult  ReturnDateNull(Rental rental)
+        public IResult CheckIfRentalId(int rentalId)
         {
-            var result = _rentalDal.GetAll(p => p.CarId == rental.CarId).Any(p => p.CarId == rental.CarId);
-            if (result)
+            var result = _rentalDal.Any(r => r.Id == rentalId);
+            if (!result)
             {
-                var result2 = _rentalDal.Get(p => p.ReturnDate == null);
-                if (result2==null)
-                {
-                    _rentalDal.GetAll(p => p.ReturnDate == null);
-                    return new SuccessResult("Kiralanmamış Arabalar1");
-                }
-
-                return new SuccessResult("Kiralanmamış Arabalar2");
+                return new ErrorResult("Araba Kiralanmaya uygun değil");
             }
-
-            return new SuccessResult("Kiralanmamış Arabalar3");
+            return new SuccessResult();
         }
+      
+
+      
     }
 }

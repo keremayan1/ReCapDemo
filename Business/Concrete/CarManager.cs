@@ -10,6 +10,7 @@ using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using Entities.Concrete.Dto;
+using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
@@ -38,6 +39,7 @@ namespace Business.Concrete
         public IResult Add(Car car)
         {
             
+          
             _carDal.Add(car);
             return new SuccessResult(CarMessages.CarAdded);
         }
@@ -53,7 +55,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarListed);
         }
 
-        public IDataResult<List<Car>> GetById(int id)
+        public IDataResult<List<Car>> GetByCarId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.Id == id),CarMessages.CarListed);
         }
