@@ -28,7 +28,7 @@ namespace Business.Concrete
        // [SecuredOperation("brands.add")]
         public IResult Add(Brand brand)
         {
-            var result = BusinessRules.Run(CheckIfBrandName(brand.Name));
+            var result = BusinessRules.Run(CheckIfBrandNameExists(brand.BrandName));
             if (result!=null)
             {
                 return result;
@@ -39,7 +39,13 @@ namespace Business.Concrete
 
         public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(brand);
+            var result = BusinessRules.Run(CheckIfBrandIdExists(brand.BrandId));
+            if (result!=null)
+            {
+                return result;
+            }
+            var deletedBrand = _brandDal.Get(b => b.BrandId == brand.BrandId);
+            _brandDal.Delete(deletedBrand);
             return new SuccessResult(BrandMessages.BrandDeleted);
         }
 
@@ -49,17 +55,32 @@ namespace Business.Concrete
             return new SuccessResult(BrandMessages.BrandUpdated);
         }
 
-        public IDataResult<List<Brand>> GetById(int id)
+       public IDataResult<Brand> GetByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(p => p.Id == id),BrandMessages.BrandListed);
+            var result = BusinessRules.Run(CheckIfBrandIdExists(brandId));
+            if (result!=null)
+            {
+                return new ErrorDataResult<Brand>(result.Message);
+            }
+            return new SuccessDataResult<Brand>(_brandDal.Get(p => p.BrandId == brandId),BrandMessages.BrandListed);
         }
 
-        public IResult CheckIfBrandName(string name)
+        public IResult CheckIfBrandNameExists(string name)
         {
-            var result = _brandDal.Any(b => b.Name.ToLower() == name.ToLower());
+            var result = _brandDal.Any(b => b.BrandName.ToLower() == name.ToLower());
             if (result)
             {
                 return new ErrorResult("Eklemek Istediginiz Araba Sistemde Vardir!");
+            }
+            return new SuccessResult();
+        }
+
+        public IResult CheckIfBrandIdExists(int brandId)
+        {
+            var result = _brandDal.Any(b => b.BrandId == brandId);
+            if (!result)
+            {
+                return new ErrorResult();
             }
 
             return new SuccessResult();

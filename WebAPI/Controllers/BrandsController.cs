@@ -70,7 +70,7 @@ namespace WebAPI.Controllers
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-            var result = _brandService.GetById(id);
+            var result = _brandService.GetByBrandId(id);
             if (result.Success)
             {
                 return Ok(result);

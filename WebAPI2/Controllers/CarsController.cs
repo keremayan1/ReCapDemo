@@ -38,10 +38,10 @@ namespace WebAPI2.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        [HttpGet("getbycarid")]
+        public IActionResult GetByCarId(int id)
         {
             var result = _carService.GetByCarId(id);
             if (result.Success)
@@ -84,7 +84,7 @@ namespace WebAPI2.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
         [HttpPost("update")]
         public IActionResult Update(Car car)
@@ -105,7 +105,19 @@ namespace WebAPI2.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcardetailbycolorid")]
+        public IActionResult GetCarDetailByColorId(int colorId)
+        {
+            var result = _carService.GetCarDetailByColorId(colorId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
     }
 }

@@ -33,9 +33,9 @@ namespace WebAPI2.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(int colorId)
         {
-            var result = _colorService.GetById(id);
+            var result = _colorService.GetByColorId(colorId);
             if (result.Success)
             {
                 return Ok(result);

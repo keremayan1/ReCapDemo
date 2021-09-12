@@ -21,20 +21,20 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context = new CarContext())
             {
                 var result = from car in filter is null ? context.Cars : context.Cars.Where(filter)
-                             join brand in context.Brands on car.BrandId equals brand.Id
-                             join color in context.Colors on car.ColorId equals color.Id
+                             join brand in context.Brands on car.BrandId equals brand.BrandId
+                             join color in context.Colors on car.ColorId equals color.ColorId
                              select new CarDetailDto
                              {
-                                 CarId = car.Id,
-                                 BrandId = brand.Id,
-                                 ColorId = color.Id,
-                                 BrandName = brand.Name,
-                                 ColorName = color.Name,
+                                 CarId = car.CarId,
+                                 BrandId = brand.BrandId,
+                                 ColorId = color.ColorId,
+                                 BrandName = brand.BrandName,
+                                 ColorName = color.ColorName,
                                  DailyPrice = car.DailyPrice,
                                  Description = car.Description,
                                  ModelYear = car.ModelYear,
-                                 ImagePath = (from image in context.CarImages where car.Id == image.CarId select image.ImagePath).FirstOrDefault(),
-                                 IsRentable = !context.Rentals.Any(r => r.CarId == car.Id) || !context.Rentals.Any(r => r.CarId == car.Id && (r.ReturnDate == null || (r.ReturnDate.HasValue && r.ReturnDate > DateTime.Now)))
+                                 ImagePath = (from image in context.CarImages where car.CarId == image.CarId select image.ImagePath).FirstOrDefault(),
+                                 IsRentable = !context.Rentals.Any(r => r.CarId == car.CarId) || !context.Rentals.Any(r => r.CarId == car.CarId && (r.ReturnDate == null || (r.ReturnDate.HasValue && r.ReturnDate > DateTime.Now)))
                              };
                 return result.ToList();
 

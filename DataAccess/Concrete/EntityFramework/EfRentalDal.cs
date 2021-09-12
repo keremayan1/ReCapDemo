@@ -18,9 +18,9 @@ namespace DataAccess.Concrete.EntityFramework
             using (CarContext context = new CarContext())
             {
                 var result = from rent in context.Rentals
-                    join car in context.Cars on rent.CarId equals car.Id
-                    join color in context.Colors on car.ColorId equals color.Id
-                    join brand in context.Brands on car.BrandId equals brand.Id
+                    join car in context.Cars on rent.CarId equals car.CarId
+                             join color in context.Colors on car.ColorId equals color.ColorId
+                    join brand in context.Brands on car.BrandId equals brand.BrandId
                     join customer in context.Customers on rent.CustomerId equals customer.CustomerId
                     join user in context.Users on customer.CustomerId equals user.Id
                     select new CarRentalDetailDto
@@ -28,9 +28,9 @@ namespace DataAccess.Concrete.EntityFramework
                         RentalID = rent.Id,
                         CustomerName = user.FirstName,
                         CustomerLastName = user.LastName,
-                        BrandName = brand.Name,
+                        BrandName = brand.BrandName,
                         CarName = car.Description,
-                        ColorName = color.Name,
+                        ColorName = color.ColorName,
                         DailyPrice = car.DailyPrice,
                         TotalPrice = Convert.ToDecimal(rent.ReturnDate.Value.Day - rent.RentDate.Day) * car.DailyPrice,
                         RentDate = rent.RentDate,
