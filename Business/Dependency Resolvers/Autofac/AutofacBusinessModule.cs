@@ -50,7 +50,7 @@ namespace Business.Dependency_Resolvers.Autofac
 
 
 
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
 
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()

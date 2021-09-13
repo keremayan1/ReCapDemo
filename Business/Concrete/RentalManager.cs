@@ -30,11 +30,11 @@ namespace Business.Concrete
 
         public IDataResult<List<Rental>> GetById(int rentalId)
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(p => p.Id == rentalId));
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(p => p.RentalId == rentalId));
         }
         public IResult Add(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfCarId(rental.CarId), CheckIfRentalId(rental.Id), IsCarAvaliable(rental.CarId));
+            var result = BusinessRules.Run(CheckIfCarId(rental.CarId), CheckIfRentalId(rental.RentalId), IsCarAvaliable(rental.CarId));
             if (result != null)
             {
                 return result;
@@ -45,7 +45,7 @@ namespace Business.Concrete
 
         public IResult Update(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfRentalId(rental.Id), CheckIfCarId(rental.CarId));
+            var result = BusinessRules.Run(CheckIfRentalId(rental.RentalId), CheckIfCarId(rental.CarId));
             if (result != null)
             {
                 return result;
@@ -56,7 +56,7 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfRentalId(rental.Id));
+            var result = BusinessRules.Run(CheckIfRentalId(rental.RentalId));
             if (result != null)
             {
                 return result;
@@ -90,7 +90,7 @@ namespace Business.Concrete
         }
         public IResult CheckIfRentalId(int rentalId)
         {
-            var result = _rentalDal.Any(r => r.Id == rentalId);
+            var result = _rentalDal.Any(r => r.RentalId == rentalId);
             if (!result)
             {
                 return new ErrorResult("Araba Kiralanmaya uygun değil");

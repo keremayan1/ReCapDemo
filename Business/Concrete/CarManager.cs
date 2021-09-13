@@ -16,7 +16,7 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDal;
+        private ICarDal _carDal;
         private IColorService _colorService;
         private IBrandService _brandService;
         public CarManager(ICarDal carDal, IColorService colorService, IBrandService brandService)
@@ -57,6 +57,12 @@ namespace Business.Concrete
                 c.BrandId == brandId && c.ColorId == colorId));
         }
 
+        public IDataResult<List<CarDetailDto>> GetCarDetailByMinPriceAndMaxPrice(decimal minPrice, decimal maxPrice)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetail(c =>
+                c.DailyPrice >= minPrice && c.DailyPrice <= maxPrice));
+        }
+
         [ValidationAspect(typeof(CarValidatior))]
         // [CacheRemoveAspect("Get")]
         public IResult Add(Car car)
@@ -74,7 +80,6 @@ namespace Business.Concrete
         public IResult Delete(Car car)
         {
             var deletedCar = _carDal.Get(c => c.CarId == car.CarId);
-
             _carDal.Delete(deletedCar);
             return new SuccessResult(CarMessages.CarDeleted);
         }
@@ -163,10 +168,5 @@ namespace Business.Concrete
 
             return new SuccessResult();
         }
-
- 
-
-
-
     }
 }
