@@ -132,7 +132,7 @@ namespace WebAPI2.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getcardetailbybrandidAndcolorid")]
+        [HttpGet("getcardetailbybrandidandcolorid")]
         public IActionResult GetCarDetailByBrandIdAndColorId(int brandId, int colorId)
         {
             var result = _carService.GetCarDetailByBrandIdAndColorId(brandId, colorId);
