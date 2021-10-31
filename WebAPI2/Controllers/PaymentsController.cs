@@ -1,29 +1,28 @@
-﻿using Business.Abstract;
-using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Abstract;
+using Entities.Concrete;
 
 namespace WebAPI2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandsController : ControllerBase
+    public class PaymentsController : ControllerBase
     {
-        private IBrandService _brandService;
+        private IPaymentService _paymentService;
 
-        public BrandsController(IBrandService brandService)
+        public PaymentsController(IPaymentService paymentService)
         {
-            _brandService = brandService;
+            _paymentService = paymentService;
         }
-
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _brandService.GetAll();
+            var result = _paymentService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -33,9 +32,9 @@ namespace WebAPI2.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Brand brand)
+        public IActionResult Add(Payment payment)
         {
-            var result = _brandService.Add(brand);
+            var result = _paymentService.Add(payment);
             if (result.Success)
             {
                 return Ok(result);
@@ -45,9 +44,9 @@ namespace WebAPI2.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete(Brand brand)
+        public IActionResult Delete(Payment payment)
         {
-            var result = _brandService.Delete(brand);
+            var result = _paymentService.Delete(payment);
             if (result.Success)
             {
                 return Ok(result);
@@ -57,9 +56,9 @@ namespace WebAPI2.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(Brand brand)
+        public IActionResult Update(Payment payment)
         {
-            var result = _brandService.Update(brand);
+            var result = _paymentService.Update(payment);
             if (result.Success)
             {
                 return Ok(result);
@@ -67,10 +66,10 @@ namespace WebAPI2.Controllers
 
             return BadRequest(result);
         }
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int brandId)
+        [HttpGet("getbypaymentid")]
+        public IActionResult GetById(int paymentId)
         {
-            var result = _brandService.GetByBrandId(brandId);
+            var result = _paymentService.GetByPaymentId(paymentId);
             if (result.Success)
             {
                 return Ok(result);
@@ -78,6 +77,5 @@ namespace WebAPI2.Controllers
 
             return BadRequest(result);
         }
-
     }
 }

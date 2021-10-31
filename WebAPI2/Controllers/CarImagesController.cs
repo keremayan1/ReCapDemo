@@ -33,10 +33,10 @@ namespace WebAPI2.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        [HttpGet("getbycarid")]
+        public IActionResult GetById(int carId)
         {
-            var result = _carImageService.GetCarImageById(id);
+            var result = _carImageService.GetCarImageById(carId);
             if (result.Success)
             {
                 return Ok(result);

@@ -65,7 +65,7 @@ namespace WebAPI2.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpPost("update")]
@@ -77,7 +77,7 @@ namespace WebAPI2.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getcustomerdetails")]
@@ -89,7 +89,7 @@ namespace WebAPI2.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
     }

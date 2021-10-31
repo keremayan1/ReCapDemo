@@ -29,7 +29,7 @@ namespace WebAPI2.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getbyid")]
@@ -40,7 +40,7 @@ namespace WebAPI2.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
         [HttpPost("add")]
         public IActionResult Add(Color color)

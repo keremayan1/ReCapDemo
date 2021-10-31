@@ -84,6 +84,11 @@ namespace Business.Concrete
             return new SuccessResult(CarMessages.CarDeleted);
         }
 
+        public IDataResult<List<Car>> GetCarsByBrandIdAndColorId(int brandId, int colorId)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId && c.ColorId == colorId));
+        }
+
         public IDataResult<List<CarDetailDto>> GetCarDetailByColorId(int colorId)
         {
             var result = BusinessRules.Run(IsColorExists(colorId));
